@@ -24,11 +24,9 @@ class PoissonDistribution(Distribution):
             k = 0
             p_aux = self.get_probability(k, True)
             while True:
-
                 p_aux += self.get_probability(k, True)
                 if (p_aux > u):
                     break
-
-            k += 1
+                k += 1
             sample.append(k)
         return sample
