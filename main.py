@@ -82,7 +82,7 @@ def get_exponential_sample():
     sample_size = request.args.get("sample_size")
     a = request.args.get("a")
     try:
-        distribution = DistributionFactory.get_distribution('poisson', {'a': float(a)})
+        distribution = DistributionFactory.get_distribution('exponential', {'a': float(a)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
