@@ -56,10 +56,11 @@ def get_negbinomial_sample():
     p = request.args.get("p")
     try:
         distribution = DistributionFactory.get_distribution('negativebinomial',
-                                                            {'r': float(r), 'p': float(p)})
+                                                            {'r': int(r), 'p': float(p)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
+        print("An error ocurred: ", e)
         return {'status': 'failed'}
     return {'status': 'success', 'sample': [str(e) for e in sample]}
 
@@ -69,7 +70,8 @@ def get_poisson_sample():
     sample_size = request.args.get("sample_size")
     l = request.args.get("l")
     try:
-        distribution = DistributionFactory.get_distribution('poisson', {'l': float(l)})
+        print("Lamda: ", l)
+        distribution = DistributionFactory.get_distribution('poisson', {'l': int(l)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
@@ -79,10 +81,11 @@ def get_poisson_sample():
 
 @app.route("/getExponential")
 def get_exponential_sample():
+    print("get exponential sample!")
     sample_size = request.args.get("sample_size")
     a = request.args.get("a")
     try:
-        distribution = DistributionFactory.get_distribution('poisson', {'a': float(a)})
+        distribution = DistributionFactory.get_distribution('exponential', {'a': float(a)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:

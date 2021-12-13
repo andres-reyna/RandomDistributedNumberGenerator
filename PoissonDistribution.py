@@ -11,8 +11,10 @@ class PoissonDistribution(Distribution):
         if acc:
             p_acc = 0
             for i in range(x+1):
-                probability = (math.exp(-1 * self.l) * self.l**i)/math.factorial(i)
+                probability = (self.l**i)/math.factorial(i)
                 p_acc += probability
+
+            p_acc *= math.exp(-1 * self.l)
             return p_acc
         else:
             return self.l ** x * math.exp(-1 * self.l) / math.factorial(x)
@@ -24,10 +26,9 @@ class PoissonDistribution(Distribution):
             k = 0
             p_aux = self.get_probability(k, True)
             while True:
-
-                p_aux += self.get_probability(k, True)
                 if (p_aux > u):
                     break
+                p_aux += self.get_probability(k, True)
 
             k += 1
             sample.append(k)

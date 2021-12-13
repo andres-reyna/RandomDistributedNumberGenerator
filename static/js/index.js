@@ -46,6 +46,8 @@ document.getElementById('btn-get-sample').onclick = (e) => {
     if(response.status == 'success') {
        content = response.sample.join(' , ')
        document.getElementById("result").innerHTML = content
+    } else {
+        alert("Error!", response)
     }
 }
 
