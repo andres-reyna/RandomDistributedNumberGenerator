@@ -10,8 +10,7 @@ def get_sample():
     mean = request.args.get("mean")
     std = request.args.get("std")
     try:
-        distribution = DistributionFactory.get_distribution('normal',
-                                                            {'mean': float(mean), 'std': float(std)})
+        distribution = DistributionFactory.get_distribution('normal', {'mean': float(mean), 'std': float(std)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
@@ -25,8 +24,7 @@ def get_normal_sample():
     mean = request.args.get("mean")
     std = request.args.get("std")
     try:
-        distribution = DistributionFactory.get_distribution('normal',
-                                                            {'mean': float(mean), 'std': float(std)})
+        distribution = DistributionFactory.get_distribution('normal', {'mean': float(mean), 'std': float(std)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
@@ -40,8 +38,7 @@ def get_binomial_sample():
     n = request.args.get("n")
     p = request.args.get("p")
     try:
-        distribution = DistributionFactory.get_distribution('binomial',
-                                                            {'n': float(n), 'p': float(p)})
+        distribution = DistributionFactory.get_distribution('binomial', {'n': float(n), 'p': float(p)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
@@ -82,7 +79,7 @@ def get_exponential_sample():
     sample_size = request.args.get("sample_size")
     a = request.args.get("a")
     try:
-        distribution = DistributionFactory.get_distribution('poisson', {'a': float(a)})
+        distribution = DistributionFactory.get_distribution('exponential', {'a': float(a)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
