@@ -10,42 +10,69 @@
           crossorigin="anonymous">
 </head>
 <body class="container-fluid d-flex flex-column align-items-center">
+    <div class=" w-75 jumbotron jumbotron-fluid background" style="background-color: #333; color:white; padding:30px;word-wrap:break-word;">
+        <div class="container center">
+          <h2 class="display-5">Random Distributed Number Generator</h2>
+        </div>
+    </div>
+    
 <div class="d-flex flex-column w-75 justify-content-center p-3 bg-light">
     <div class="d-flex flex-column align-items-center p-2">
-        <select name="distributions" id="select-distribution">
-            <option value="normal">Normal</option>
-            <option value="binomial">Binomial</option>
-            <option value="negbinomial">Negative Binomial</option>
-            <option value="exponential">Exponential</option>
-            <option value="poisson">Poisson</option>
-        </select>
+        <div class="col-md-6">
+            <label for="">Distribution:</label>
+            <select name="distributions" id="select-distribution" class="form-control">
+                <option value="normal">Normal</option>
+                <option value="binomial">Binomial</option>
+                <option value="negbinomial">Negative Binomial</option>
+                <option value="exponential">Exponential</option>
+                <option value="poisson">Poisson</option>
+            </select>
+        </div>
+        
     </div>
+
     <div id="arguments" class="p-2">
-        <div id="normal" style="">
-            <input type="number" id="n-mean" name="n-mean" min="0" placeholder="Mean">
-            <input type="number" id="n-std"  name="n-std" min="0" placeholder="Standard Deviation">
-       </div>
-        <div id="binomial" style="display:none">
-            <input type="number" id="b-n" name="b-n" min="0" placeholder="N">
-            <input type="number" id="b-p"  name="b-p" min="0" placeholder="P">
+        <label for="">Parameters: </label>
+        <div class="col-md-6">
+            <div id="normal" style="">
+                <div class="form-group">
+                    <input type="number" id="n-mean" name="n-mean" min="0" placeholder="Mean" class="form-control">
+                    <input type="number" id="n-std"  name="n-std" min="0" placeholder="Standard Deviation" class="form-control">
+                </div>
+                
+           </div>
+            <div id="binomial" style="display:none">
+                <input type="number" id="b-n" name="b-n" min="0" placeholder="N" class="form-control">
+                <input type="number" id="b-p"  name="b-p" min="0" placeholder="P" class="form-control">
+            </div>
+            <div id="negbinomial" style="display:none">
+                <input type="number" id="nb-r" name="nb-r" min="0" placeholder="R" class="form-control">
+                <input type="number" id="nb-p"  name="nb-p" min="0" placeholder="P" class="form-control">
+            </div>
+            <div id="poisson" style="display:none">
+                <input type="number" id="p-l" name="b-n" min="0" placeholder="L" class="form-control">
+            </div>
+            <div id="exponential" style="display:none">
+                <input type="number" id="e-a" name="e-a" min="0" placeholder="A" class="form-control">
+            </div>
+
+            <div class="">
+                <input type="number" id="sample-size"  name="n-sample-size" min="0" placeholder="Sample Size" class="form-control">
+            </div>
         </div>
-        <div id="negbinomial" style="display:none">
-            <input type="number" id="nb-r" name="nb-r" min="0" placeholder="R">
-            <input type="number" id="nb-p"  name="nb-p" min="0" placeholder="P">
-        </div>
-        <div id="poisson" style="display:none">
-            <input type="number" id="p-l" name="b-n" min="0" placeholder="L">
-        </div>
-        <div id="exponential" style="display:none">
-            <input type="number" id="e-a" name="e-a" min="0" placeholder="A">
-        </div>
-        <div class="m-2">
-            <input type="number" id="sample-size"  name="n-sample-size" min="0" placeholder="Sample Size">
-        </div>
+        
+        
     </div>
+    <br>
     <input id="btn-get-sample" class="btn-sm btn-primary" type="submit" value="Get Sample">
 </div>
+
+<br>
+<div><b>Output:</b></div>
+
 <div class="container-fluid w-75 p-3 lead">
+    
+
     <strong id="result">
         1.23251, 1.23251, 1.23251, 1.23251, 1.23251, 1.23251, 1.23251,
         1.23251, 1.23251, 1.23251, 1.23251, 1.23251, 1.23251, 1.23251, 1.23251,
