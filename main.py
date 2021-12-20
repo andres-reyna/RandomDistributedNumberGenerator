@@ -28,7 +28,7 @@ def get_normal_sample():
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
-        return {'status': 'failed'}
+        return {'status': 'failed', 'error': str(e)}
     return {'status': 'success', 'sample': [str(e) for e in sample]}
 
 
@@ -37,12 +37,14 @@ def get_binomial_sample():
     sample_size = request.args.get("sample_size")
     n = request.args.get("n")
     p = request.args.get("p")
+    print("Binomial with: p=%s, n=%s" % (p,n))
+    sample = []
     try:
-        distribution = DistributionFactory.get_distribution('binomial', {'n': float(n), 'p': float(p)})
+        distribution = DistributionFactory.get_distribution('binomial', {'n': int(n), 'p': float(p)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
-        return {'status': 'failed'}
+        return {'status': 'failed', 'error': str(e)}
     return {'status': 'success', 'sample': [str(e) for e in sample]}
 
 
@@ -53,11 +55,11 @@ def get_negbinomial_sample():
     p = request.args.get("p")
     try:
         distribution = DistributionFactory.get_distribution('negativebinomial',
-                                                            {'r': float(r), 'p': float(p)})
+                                                            {'r': int(r), 'p': float(p)})
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
-        return {'status': 'failed'}
+        return {'status': 'failed', 'error': str(e)}
     return {'status': 'success', 'sample': [str(e) for e in sample]}
 
 
@@ -70,7 +72,7 @@ def get_poisson_sample():
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
-        return {'status': 'failed'}
+        return {'status': 'failed', 'error': str(e)}
     return {'status': 'success', 'sample': [str(e) for e in sample]}
 
 
@@ -83,7 +85,7 @@ def get_exponential_sample():
         sample = distribution.get_sample(int(sample_size))
         print("sample: ", sample)
     except Exception as e:
-        return {'status': 'failed'}
+        return {'status': 'failed', 'error': str(e)}
     return {'status': 'success', 'sample': [str(e) for e in sample]}
 
 

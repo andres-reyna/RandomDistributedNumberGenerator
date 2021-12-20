@@ -13,13 +13,12 @@ class BinomialDistribution(Distribution):
     def get_probability(self, x, acc):
         if acc:
             p_acc = 0
-            for i in range(x+1):
+            for i in range(x + 1):
                 probability = comb(self.n, i) * (self.p ** i) * (self.q ** (self.n - i))
                 p_acc = p_acc + probability
             return p_acc
         else:
             return comb(self.n, x) * (self.p ** x) * (self.q ** (self.n - x))
-
 
     def get_sample(self, n):
         sample = []
@@ -30,7 +29,7 @@ class BinomialDistribution(Distribution):
             while True:
                 k += 1
                 p_aux += self.get_probability(k, True)
-                if(p_aux > u):
+                if p_aux > u:
                     break
             sample.append(k)
         return sample

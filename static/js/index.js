@@ -47,6 +47,9 @@ document.getElementById('btn-get-sample').onclick = (e) => {
        content = response.sample.join(' , ')
        document.getElementById("result").innerHTML = content
     }
+    else {
+        console.log(response.error)
+    }
 }
 
 function hideAllInputs() {
