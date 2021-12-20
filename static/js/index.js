@@ -57,8 +57,24 @@ function hideAllInputs() {
     document.getElementById('exponential').style.display = "none"
 }
 
+function clearInputs(){
+    document.getElementById('result').innerHTML = '';
+    document.getElementById('n-mean').value = '';
+    document.getElementById('n-std').value = '';
+    
+    document.getElementById('b-n').value = '';
+    document.getElementById('b-p').value = '';
+
+    document.getElementById('p-l').value = '';
+
+    document.getElementById('e-a').value = '';
+
+    document.getElementById('sample-size').value = '';
+}
+
 document.getElementById('select-distribution').onchange = (e) => {
     distribution = document.getElementById('select-distribution').value
     hideAllInputs()
+    clearInputs()
     document.getElementById(distribution).style.display = "block"
 }
