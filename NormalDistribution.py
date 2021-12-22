@@ -1,4 +1,8 @@
+import math
+
 import numpy
+from scipy.integrate import quad
+
 from Distribution import Distribution
 from math import exp, sqrt, pi, log, sin
 from scipy.stats import norm
@@ -9,9 +13,16 @@ class NormalDistribution(Distribution):
         self.mean = parameters['mean']
         self.std = parameters['std']
 
+    def getFunctionValue(self, z):
+        c = 1 / (math.sqrt(2 * (math.pi)))
+        exp = numpy.exp(-0.5 * pow(z, 2))
+        return c * exp
+
     def get_probability(self, x, acc):
         if acc:
-            return norm.cdf(x, self.mean, self.std)
+            z = (x - self.mean) / self.std
+            p = quad(self.getFunctionValue, numpy.NINF, z)
+            return p[0]
         else:
             return (1 / (self.std * sqrt(2 * pi))) * exp((-((x - self.mean) ** 2) / ((2 * self.std) ** 2)))
 

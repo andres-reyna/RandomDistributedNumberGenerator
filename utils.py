@@ -1,6 +1,7 @@
 from DistributionFactory import DistributionFactory
 import plotly.express as px
 
+
 def generate_pdf(distribution, sample_size, params):
     probabilities = []
     sample = []
@@ -25,9 +26,8 @@ def generate_pdf(distribution, sample_size, params):
             print({'status': 'failed', 'error': str(e)})
     elif distribution =='negbinomial':
         try:
-            distribution = DistributionFactory.get_distribution('negbinomial', params)
+            distribution = DistributionFactory.get_distribution('negativebinomial', params)
             sample = distribution.get_sample(int(sample_size))
-            print("Sample: ",  sample)
             for s in sample:
                 probabilities.append(distribution.get_probability(s, False))
         except Exception as e:
@@ -45,22 +45,23 @@ def generate_pdf(distribution, sample_size, params):
         try:
             distribution = DistributionFactory.get_distribution('exponential', params)
             sample = distribution.get_sample(int(sample_size))
-            print("Sample: ",  sample)
             for s in sample:
-                probabilities.append(distribution.get_probability(s, False))
+                probability = distribution.get_probability(s, False)
+                print('probability of %f: %f' % (s, probability))
+                probabilities.append(probability)
         except Exception as e:
             print({'status': 'failed', 'error': str(e)})
 
-    # sample.sort()
-    print("# # # # # # ########## Sample ########### # # # # # # ", sample)
+    print("Sample: ", sample)
+    print("# # # # # # ########## probabilities ########### # # # # # # ", probabilities)
     fig = px.scatter(x=sample,y=probabilities)
 
     fig.update_layout(margin={'l': 40, 'b': 40, 't': 10, 'r': 0}, hovermode='closest')
 
     return fig
 
+
 def generate_plot(distribution, sample_size, params):
-    print("----------------------------------------- Generating distribution: ", distribution)
     x = []
     sample = []
 
@@ -100,9 +101,6 @@ def generate_plot(distribution, sample_size, params):
 
     for i in range(len(sample)):
         x.append(i)
-
-    # print(sample_size)
-    # print(sample)
 
     fig = px.scatter(x=x, y=sample)
 
