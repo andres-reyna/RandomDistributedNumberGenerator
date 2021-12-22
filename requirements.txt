@@ -1,7 +1,5 @@
 scipy~=1.7.3
 Flask~=2.0.2
 numpy~=1.21.4
-pandas
 dash
-dash_extensions
 dash_bootstrap_components

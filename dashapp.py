@@ -5,14 +5,18 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from utils import generate_plot, generate_pdf
 
-from dash_extensions.enrich import DashProxy, TriggerTransform, MultiplexerTransform, ServersideOutputTransform, NoOutputTransform
+#from dash_extensions.enrich import DashProxy, TriggerTransform, MultiplexerTransform, ServersideOutputTransform, NoOutputTransform
 
-app = DashProxy(transforms=[
+# app = DashProxy(transforms=[
 
-    MultiplexerTransform(),  # makes it possible to target an output multiple times in callbacks
+#     MultiplexerTransform(),  # makes it possible to target an output multiple times in callbacks
 
-],external_stylesheets=[dbc.themes.BOOTSTRAP],)
-
+# ],external_stylesheets=[dbc.themes.BOOTSTRAP],)
+app = dash.Dash(__name__)
+app = dash.Dash(
+    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    suppress_callback_exceptions=True
+)
 app.config.suppress_callback_exceptions = True
 
 
@@ -96,7 +100,8 @@ app.layout = html.Div([
              ], className='col-6', style={'padding':'30px'}),
 
     html.Br(),
-    dbc.Input(id='sample-size', type='number', placeholder='Sample size', step=1),
+    dbc.Label('Sample Size:'),
+    dbc.Input(id='sample-size', type='number', placeholder='Sample size', step=1, style={'width': '50%'}),
     html.Br(),
     dbc.Button("Get Sample", id='btn-submit', color="primary", style={'width': '100%'}),
     html.Br(),
