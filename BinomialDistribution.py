@@ -24,11 +24,13 @@ class BinomialDistribution(Distribution):
         sample = []
         for i in range(n):
             u = numpy.random.uniform(0, 1, 1)[0]
+            print("U: ", u)
             k = 0
-            p_aux = self.get_probability(k, True)
+            p_aux = 0
             while True:
                 k += 1
                 p_aux += self.get_probability(k, True)
+                print("p_aux = ", p_aux)
                 if p_aux > u:
                     break
             sample.append(k)

@@ -22,9 +22,9 @@ class PoissonDistribution(Distribution):
         for i in range(n):
             u = random.random()
             k = 0
-            p_aux = self.get_probability(k, True)
+            p_aux = 0.0
             while True:
-                p_aux += self.get_probability(k, True)
+                p_aux += self.get_probability(k, False)
                 if (p_aux > u):
                     break
                 k += 1

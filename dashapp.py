@@ -7,25 +7,6 @@ from utils import generate_plot, generate_pdf
 
 from dash_extensions.enrich import DashProxy, TriggerTransform, MultiplexerTransform, ServersideOutputTransform, NoOutputTransform
 
-# app = DashProxy(transforms=[
-#     TriggerTransform(),  # enable use of Trigger objects
-#     MultiplexerTransform(),  # makes it possible to target an output multiple times in callbacks
-#     ServersideOutputTransform(),  # enable use of ServersideOutput objects
-#     NoOutputTransform(),  # enable callbacks without output
-# ])
-
-
-################################################
-from DistributionFactory import DistributionFactory
-
-
-################################################
-
-#app = dash.Dash(__name__)
-# app = dash.Dash(
-#     external_stylesheets=[dbc.themes.BOOTSTRAP],
-#     suppress_callback_exceptions=True
-# )
 app = DashProxy(transforms=[
 
     MultiplexerTransform(),  # makes it possible to target an output multiple times in callbacks
@@ -70,15 +51,6 @@ app.layout = html.Div([
                 value=''
             ),
         ], className='col-6'),
-
-        # html.Div([
-        #     dcc.Dropdown(
-        #         id='yaxis-column',
-        #         options=[{'label': i, 'value': i} for i in available_indicators],
-        #         value='Life expectancy at birth, total (years)'
-        #     ),
-
-        # ], style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
     ]),
 
     html.Br(),
@@ -92,26 +64,26 @@ app.layout = html.Div([
                      children=[
                          dbc.Input(id='n-mean', type='number', placeholder='Mean', step=0.1),
                          html.Br(),
-                         dbc.Input(id='n-std', type='number', placeholder='Standard Deviation', step=0.1),
+                         dbc.Input(id='n-std', type='number', placeholder='Standard Deviation', step=0.001),
                          html.Br()], style={'display': 'none'}),
                  html.Div(
                      id='binomial-parameters',
                      children=[
                          dbc.Input(id='b-r', type='number', placeholder='R', step=0.1),
                          html.Br(),
-                         dbc.Input(id='b-p', type='number', placeholder='P', min=0, max=1, step=0.1),
+                         dbc.Input(id='b-p', type='number', placeholder='P', min=0, max=1, step=0.001),
                          html.Br()], style={'display': 'none'}),
                  html.Div(
                      id='negbinomial-parameters',
                      children=[
                          dbc.Input(id='nb-r', type='number', placeholder='R', step=0.1),
                          html.Br(),
-                         dbc.Input(id='nb-p', type='number', placeholder='Standard Deviation', min=0, max=1, step=0.1),
+                         dbc.Input(id='nb-p', type='number', placeholder='P', min=0, max=1, step=0.001),
                          html.Br()], style={'display': 'none'}),
                  html.Div(
                      id='exponential-parameters',
                      children=[
-                         dbc.Input(id='e-a', type='number', placeholder='Alpha', step=0.1),
+                         dbc.Input(id='e-a', type='number', placeholder='Alpha', step=0.001),
                          html.Br(),
                          html.Br()], style={'display': 'none'}),
 
@@ -129,14 +101,28 @@ app.layout = html.Div([
     dbc.Button("Get Sample", id='btn-submit', color="primary", style={'width': '100%'}),
     html.Br(),
 
-    dbc.Label('Generated Sample Graph:'),
-
-    dcc.Graph(id='indicator-graphic'),
-
     html.Br(),
-    dbc.Label('Probability Density Function Graph:'),
+        dbc.Row(
+            [
+                dbc.Col(
+                    html.Div(
+                        children=[
+                            dbc.Label('Generated Sample Graph:'),
+                            dcc.Graph(id='indicator-graphic'),
+                        ],
+                    )
 
-    dcc.Graph(id='pdf-graphic'),
+                ),
+                dbc.Col(
+                    html.Div(
+                        children=[
+                            dbc.Label('Probability Density Function Graph:'),
+                            dcc.Graph(id='pdf-graphic'),
+                        ]
+                    )
+                ),
+            ]
+        ),
 ],className='container')
 
 @app.callback(

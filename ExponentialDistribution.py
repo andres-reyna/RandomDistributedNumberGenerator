@@ -18,7 +18,8 @@ class ExponentialDistribution(Distribution):
         sample = []
         for i in range(n):
             u = numpy.random.uniform(0, 1, 1)[0]
-            sample.append(self.a * math.log(u))
+            p = math.log(1 - u) / (-self.a)
+            sample.append(p)
         return sample
     # def get_sample(self, n):
     #     sample = []
