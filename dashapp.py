@@ -3,7 +3,7 @@ from dash import dcc, html
 import dash_bootstrap_components as dbc
 
 from dash.dependencies import Input, Output, State
-import plotly.express as px
+from utils import generate_plot, generate_pdf
 
 from dash_extensions.enrich import DashProxy, TriggerTransform, MultiplexerTransform, ServersideOutputTransform, NoOutputTransform
 
@@ -36,6 +36,7 @@ app.config.suppress_callback_exceptions = True
 
 
 distributions = [
+    ['', ''],
     ['normal', 'Normal'],
     ['binomial','Binomial'],
     ['negbinomial', 'Binomial Negativa'],
@@ -91,9 +92,14 @@ app.layout = html.Div([
     ], className='col-6', style={'padding':'30px'}),
 
     html.Br(),
-    dbc.Label('Output:'),
+    dbc.Label('Generated Sample Graph:'),
 
     dcc.Graph(id='indicator-graphic'),
+
+    html.Br(),
+    dbc.Label('Probability Density Function Graph:'),
+
+    dcc.Graph(id='pdf-graphic'),
 ],className='container')
 
 @app.callback(
@@ -112,7 +118,7 @@ def update_output(distribution):
             dbc.Input(id='sample-size', type='number', placeholder='Sample size', step=1),
             html.Br(),
             dbc.Button("Get Sample", id='btn-submit', color="primary", style={'width':'100%'})
-            
+
         ]),
     
     elif distribution =='binomial':
@@ -140,48 +146,30 @@ def update_output(distribution):
             dbc.Button("Get Sample", id='btn-submit', color="primary", style={'width':'100%'})
             
         ]),
-        
+
+    elif distribution == 'exponential':
+        content = html.Div([
+
+            dbc.Input(id='e-a', type='number', placeholder='alpha'),
+            html.Br(),
+            dbc.Input(id='sample-size', type='number', placeholder='Sample size', step=1),
+            html.Br(),
+            dbc.Button("Get Sample", id='btn-submit', color="primary", style={'width': '100%'})
+
+        ]),
+
+    elif distribution == 'poisson':
+        content = html.Div([
+
+            dbc.Input(id='p-l', type='number', placeholder='lambda'),
+            html.Br(),
+            dbc.Input(id='sample-size', type='number', placeholder='Sample size', step=1),
+            html.Br(),
+            dbc.Button("Get Sample", id='btn-submit', color="primary", style={'width': '100%'})
+
+        ]),
 
     return content
-
-def generate_plot(distribution, sample_size, params):
-    x = []
-    sample = []
-
-    if distribution =='normal':
-        try:
-            distribution = DistributionFactory.get_distribution('normal', params)
-            sample = distribution.get_sample(int(sample_size))
-        except Exception as e:
-            print({'status': 'failed', 'error': str(e)})
-        
-    elif distribution =='binomial':
-        try:
-            distribution = DistributionFactory.get_distribution('binomial', params)
-            sample = distribution.get_sample(int(sample_size))
-        except Exception as e:
-            print({'status': 'failed', 'error': str(e)})
-    
-    elif distribution =='negbinomial':
-        try:
-            distribution = DistributionFactory.get_distribution('negativebinomial', params)
-            sample = distribution.get_sample(int(sample_size))
-        except Exception as e:
-            print({'status': 'failed', 'error': str(e)})
-    
-
-    for i in range(len(sample)):
-        x.append(i)
-    
-    #print(sample_size)
-    #print(sample)
-
-    fig = px.scatter(x=x,y=sample)
-
-    fig.update_layout(margin={'l': 40, 'b': 40, 't': 10, 'r': 0}, hovermode='closest')
-
-    return fig
-
 
 ###########################################################
 # NORMAL DISTRIBUTION
@@ -189,7 +177,7 @@ def generate_plot(distribution, sample_size, params):
 @app.callback(
     Output('indicator-graphic', 'figure'),
     Input('distribution-select', 'value'),
-    
+
     Input('btn-submit', 'n_clicks'),
 
     State('n-mean', 'value'),
@@ -203,11 +191,30 @@ def generate_plot(distribution, sample_size, params):
         prevent_initial_call=True
     )
 def update_graph(distribution, _,sample_size, n_mean, n_std):
-
     print('Params')
     print(n_mean,' ', n_std,' ', sample_size)
-    
+
     fig = generate_plot(distribution, sample_size,{'mean': n_mean, 'std': n_std})
+    return fig
+
+
+@app.callback(
+    Output('pdf-graphic', 'figure'),
+    Input('distribution-select', 'value'),
+
+    Input('btn-submit', 'n_clicks'),
+
+    State('n-mean', 'value'),
+    State('n-std', 'value'),
+
+    Input('sample-size', 'value'),
+    prevent_initial_call=True
+)
+def update_graph(distribution, _, sample_size, n_mean, n_std):
+    print('Params')
+    print(n_mean, ' ', n_std, ' ', sample_size)
+
+    fig = generate_pdf(distribution, sample_size, {'mean': n_mean, 'std': n_std})
     return fig
 
 
@@ -234,6 +241,26 @@ def update_graph(distribution, _, sample_size,b_n, b_p):
     return fig
 
 
+@app.callback(
+    Output('pdf-graphic', 'figure'),
+    Input('distribution-select', 'value'),
+
+    Input('btn-submit', 'n_clicks'),
+
+    State('b-n', 'value'),
+    State('b-p', 'value'),
+
+    Input('sample-size', 'value'),
+    prevent_initial_call=True
+)
+def update_graph(distribution, _, sample_size, b_n, b_p):
+    print('Params')
+    print(b_n, ' ', b_p, ' ', sample_size)
+
+    fig = generate_pdf(distribution, sample_size, {'n': b_n, 'p': b_p})
+    return fig
+
+
 ###########################################################
 # NEGATIVE BINOMIAL DISTRIBUTION
 ###########################################################
@@ -254,6 +281,43 @@ def update_graph(distribution, _, sample_size,nb_r, nb_p):
     print(nb_r,' ', nb_p,' ', sample_size)
 
     fig = generate_plot(distribution, sample_size,{'r': int(nb_r), 'p': float(nb_p)})
+    return fig
+
+
+###########################################################
+# POISSON DISTRIBUTION
+###########################################################
+@app.callback(
+    Output('indicator-graphic', 'figure'),
+    Input('distribution-select', 'value'),
+
+    Input('btn-submit', 'n_clicks'),
+
+    State('p-lambda', 'value'),
+
+    Input('sample-size', 'value'),
+    prevent_initial_call=True
+)
+def update_graph(distribution, _, sample_size, p_lambda):
+    print("Arguments: %d %d" % (sample_size, p_lambda))
+    fig = generate_plot(distribution, sample_size, {'l': p_lambda})
+    return fig
+
+
+@app.callback(
+    Output('pdf-graphic', 'figure'),
+    Input('distribution-select', 'value'),
+
+    Input('btn-submit', 'n_clicks'),
+
+    State('p-lambda', 'value'),
+
+    Input('sample-size', 'value'),
+    prevent_initial_call=True
+)
+def update_graph(distribution, _, sample_size, p_lambda):
+    print("Arguments: %d %d" % (sample_size, p_lambda))
+    fig = generate_pdf(distribution, sample_size, {'l': p_lambda})
     return fig
 
 
