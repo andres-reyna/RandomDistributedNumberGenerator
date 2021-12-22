@@ -26,13 +26,16 @@ class NegativeBinomialDistribution(Distribution):
 
     def get_sample(self, n):
         sample = []
+        print("######################### Binomial sampling! ################# ")
         for i in range(n):
             u = numpy.random.uniform(0, 1, 1)[0]
             k = self.r
-            p_aux = 0
+            p_aux = self.get_probability(k, False)
+            print("k: %d, p_aux: %f" % (k, p_aux))
             while True:
                 k += 1
                 p_aux += self.get_probability(k, False)
+                print("k: %d, p_aux: %f" % (k, p_aux))
                 if (p_aux > u):
                     break
             sample.append(k)

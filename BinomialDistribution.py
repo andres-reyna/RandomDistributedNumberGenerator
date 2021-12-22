@@ -26,10 +26,10 @@ class BinomialDistribution(Distribution):
             u = numpy.random.uniform(0, 1, 1)[0]
             print("U: ", u)
             k = 0
-            p_aux = 0
+            p_aux = self.get_probability(k, True)
             while True:
                 k += 1
-                p_aux += self.get_probability(k, True)
+                p_aux += self.get_probability(k, False)
                 print("p_aux = ", p_aux)
                 if p_aux > u:
                     break

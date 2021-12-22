@@ -10,7 +10,6 @@ def generate_pdf(distribution, sample_size, params):
         try:
             distribution = DistributionFactory.get_distribution('normal', params)
             sample = distribution.get_sample(int(sample_size))
-            print("Sample: ",  sample)
             for s in sample:
                 probabilities.append(distribution.get_probability(s, False))
         except Exception as e:
@@ -19,7 +18,6 @@ def generate_pdf(distribution, sample_size, params):
         try:
             distribution = DistributionFactory.get_distribution('binomial', params)
             sample = distribution.get_sample(int(sample_size))
-            print("Sample: ",  sample)
             for s in sample:
                 probabilities.append(distribution.get_probability(s, False))
         except Exception as e:
