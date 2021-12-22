@@ -36,7 +36,6 @@ app.config.suppress_callback_exceptions = True
 
 
 distributions = [
-    ['', ''],
     ['normal', 'Normal'],
     ['binomial','Binomial'],
     ['negbinomial', 'Binomial Negativa'],
@@ -170,6 +169,11 @@ def show_hide_element(distribution):
                 {"display": 'none'}, {"display": 'none'},
                 {"display": 'block'}]
 
+    return [{"display": 'none'}, {"display": 'none'},
+            {"display": 'none'}, {"display": 'none'},
+            {"display": 'none'}]
+
+
 ###########################################################
 # NORMAL DISTRIBUTION
 ###########################################################
@@ -191,19 +195,19 @@ def show_hide_element(distribution):
 def show_sample_graph(n_clics, distribution, n_mean, n_std,
                    b_r, b_p, nb_r, nb_p, e_a, p_l, sample_size):
     if(distribution == 'normal'):
-        fig = generate_plot(distribution, sample_size, {'mean': n_mean, 'std': n_std})
+        fig = generate_plot(distribution, sample_size, {'mean': float(n_mean), 'std': int(n_std)})
         return fig
     elif (distribution == 'binomial'):
-        fig = generate_plot(distribution, sample_size, {'n': b_r, 'p': b_p})
+        fig = generate_plot(distribution, sample_size, {'n': int(b_r), 'p': float(b_p)})
         return fig
     elif (distribution == 'negbinomial'):
-        fig = generate_plot(distribution, sample_size, {'r': nb_r, 'p': nb_p})
+        fig = generate_plot(distribution, sample_size, {'r': int(nb_r), 'p': float(nb_p)})
         return fig
     elif (distribution == 'exponential'):
-        fig = generate_plot(distribution, sample_size, {'a': e_a})
+        fig = generate_plot(distribution, sample_size, {'a': float(e_a)})
         return fig
     elif(distribution == 'poisson'):
-        fig = generate_plot(distribution, sample_size,{'l': p_l})
+        fig = generate_plot(distribution, sample_size,{'l': int(p_l)})
         return fig
 
 @app.callback(

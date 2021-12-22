@@ -18,12 +18,18 @@ class ExponentialDistribution(Distribution):
         sample = []
         for i in range(n):
             u = numpy.random.uniform(0, 1, 1)[0]
-            k = 0
-            p_aux = self.get_probability(k, True)
-            while True:
-                k += 1
-                p_aux += self.get_probability(k, True)
-                if(p_aux > u):
-                    break
-            sample.append(k)
+            sample.append(self.a * math.log(u))
         return sample
+    # def get_sample(self, n):
+    #     sample = []
+    #     for i in range(n):
+    #         u = numpy.random.uniform(0, 1, 1)[0]
+    #         k = 0
+    #         p_aux = self.get_probability(k, True)
+    #         while True:
+    #             k += 1
+    #             p_aux += self.get_probability(k, True)
+    #             if(p_aux > u):
+    #                 break
+    #         sample.append(k)
+    #     return sample
